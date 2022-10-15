@@ -15,6 +15,7 @@ let fs = require ('fs');
 const PORT = 8080;
 const endpoint1 = '/engines';
 let enginesListFilename = 'engines_data.txt';
+let enginesList;
 
 class Engine {
     constructor(id,type,md)
@@ -24,13 +25,6 @@ class Engine {
         this.manufactureDate = md;
     }
 }
-
-let e0 = new Engine(0,'Gas',2020);
-let e1 = new Engine(1,'Diesel',2021);
-let e2 = new Engine(2,'Electric',2022);
-let defaultEnginesList = [];
-defaultEnginesList.push(e0,e1,e2);
-let enginesList;
 
 function writeListOnDisk(list,filename)
 {
@@ -83,6 +77,7 @@ function updateManufactureDate(request, response)
     // console.log(request);
     id = request.body.key;
     newManufactureDate = request.body.value;
+
 
     console.log(`id: ${id}`);
     console.log(`newManufactureDate: ${newManufactureDate}`);
