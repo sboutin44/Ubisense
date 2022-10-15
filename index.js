@@ -1,7 +1,20 @@
+/*
+    * Sebastien Boutin
+
+    Install:
+        1. Download node js at https://nodejs.org/en/
+        2. $ npm init -y
+        3. $ npm install expres
+        
+    Run:
+        $ node index.js
+ */
+
 const app = require('express')(); 
 let fs = require ('fs');
 const PORT = 8080;
 const endpoint1 = '/engines';
+let enginesListFilename = 'engines_data.txt';
 
 class Engine {
     constructor(id,type,md)
@@ -15,30 +28,79 @@ class Engine {
 let e0 = new Engine(0,'Gas',2020);
 let e1 = new Engine(1,'Diesel',2021);
 let e2 = new Engine(2,'Electric',2022);
-let enginesList = [];
-enginesList.push(e0,e1,e2);
+let defaultEnginesList = [];
+defaultEnginesList.push(e0,e1,e2);
+let enginesList;
 
-function saveEngineList()
+function writeListOnDisk(list,filename)
 {
-    let filename = 'engines_data.txt';
-
-    var json = JSON.stringify(enginesList);
+    var json = JSON.stringify(list);
     fs.writeFile(filename, json, function (err) {
         if (err) throw err;
         console.log('Engine list written successfully!');
         });
 }
 
+function readListFromDisk(filename)
+{
+    let list = [];
+
+    try {
+        rawList = fs.readFileSync(filename,'utf-8');
+        list = JSON.parse(rawList);
+    } catch (err) {
+        throw err;
+    }
+
+    return list;
+}
+
+function add(a,b)
+{
+    return a+b;
+}
+
 function appStartup()
 {
     console.log(`Listening on http://localhost:${PORT}`);
-    saveEngineList();
+
+    // Load an engine list file if it exists.
+    enginesList = readListFromDisk(enginesListFilename);
+    console.log(enginesList);
 }
 
-function sendEngineList(request,response)
+function getEngineList(response)
 {
-    response.status(200).send({enginesList})   
+    response.status(200).send(enginesList)   
 }
+
+function updateManufactureDate(request, response)
+{
+    console.log("updateManufactureDate");
+    let found = false;
+
+    // Extract request
+    // console.log(request);
+    id = request.body.key;
+    newManufactureDate = request.body.value;
+
+    console.log(`id: ${id}`);
+    console.log(`newManufactureDate: ${newManufactureDate}`);
+
+    // Replace the manufacture date if we find the engine id.
+    // for (obj in enginesList)
+    // {
+    //     if (obj.id == id)
+    //     {
+    //         obj.manufactureDate = newManufactureDate;
+    //         found = true;
+    //         console.log("Updated manufacture date. ");
+    //     }
+    // }
+    // if (found == false)
+    //     console.log("Error: engine id not in database.");
+}
+
 
 app.listen(
     PORT,
@@ -47,5 +109,10 @@ app.listen(
 
 app.get( 
     endpoint1, 
-    (req,res) => sendEngineList(req,res) 
+    (req,res) => getEngineList(res) 
 );
+
+app.put(
+    endpoint1, 
+    (req, res) => updateManufactureDate(req, res)
+)
