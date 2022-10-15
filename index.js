@@ -19,6 +19,6 @@ app.listen(
 )
 
 app.get( 
-    '/engines', 
+    endpoint1, 
     (req,res) => sendEngineList(req,res) 
 );
