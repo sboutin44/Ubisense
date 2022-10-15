@@ -1,16 +1,26 @@
-const app = require('express')();
+const app = require('express')(); 
+let fs = require ('fs');
 const PORT = 8080;
 const endpoint1 = '/engines';
 
-function sendEngineList(res,res)
+class Engine {
+    constructor(id,type,md)
+    {
+        this.id = id;
+        this.type = type;
+        this.manufactureDate = md;
+    }
+}
+
+let e0 = new Engine(0,'Gas',2020);
+let e1 = new Engine(1,'Diesel',2021);
+let e2 = new Engine(2,'Electric',2022);
+let enginesList = [];
+enginesList.push(e0,e1,e2);
+
+function sendEngineList(request,response)
 {
-    res.status(200).send(
-        {
-            id:11,
-            name:"enginename",
-            manufDate: 1984
-        }
-    )   
+    response.status(200).send({enginesList})   
 }
 
 app.listen(
