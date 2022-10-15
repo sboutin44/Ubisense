@@ -18,9 +18,21 @@ let e2 = new Engine(2,'Electric',2022);
 let enginesList = [];
 enginesList.push(e0,e1,e2);
 
+function saveEngineList()
+{
+    let filename = 'engines_data.txt';
+
+    var json = JSON.stringify(enginesList);
+    fs.writeFile(filename, json, function (err) {
+        if (err) throw err;
+        console.log('Engine list written successfully!');
+        });
+}
+
 function appStartup()
 {
     console.log(`Listening on http://localhost:${PORT}`);
+    saveEngineList();
 }
 
 function sendEngineList(request,response)
