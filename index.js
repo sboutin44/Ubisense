@@ -18,6 +18,11 @@ let e2 = new Engine(2,'Electric',2022);
 let enginesList = [];
 enginesList.push(e0,e1,e2);
 
+function appStartup()
+{
+    console.log(`Listening on http://localhost:${PORT}`);
+}
+
 function sendEngineList(request,response)
 {
     response.status(200).send({enginesList})   
@@ -25,7 +30,7 @@ function sendEngineList(request,response)
 
 app.listen(
     PORT,
-    () => console.log(`it's alive on localhost:${PORT}`)
+    () => appStartup()
 )
 
 app.get( 
