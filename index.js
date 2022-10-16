@@ -89,6 +89,7 @@ function updateManufactureDate(request, response)
         {
             enginesList[i].manufactureDate = newManufactureDate;
             found = true;
+            writeListOnDisk(enginesList,enginesListFilename);
             console.log("Updated manufacture date. ");
             response.sendStatus(200);
         }
