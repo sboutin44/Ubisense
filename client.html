@@ -1,7 +1,10 @@
 
 <!-- 
   Guides:
-  https://www.w3schools.com/js/js_json_html.asp 
+  - GET request and response handling:
+    https://www.w3schools.com/js/js_json_html.asp 
+  - Submit button and it's events:
+    https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit_event    
 -->
 
 <!DOCTYPE html>
@@ -43,6 +46,31 @@ xmlhttp.onload = function() {
 xmlhttp.open("GET", "http://localhost:8080/engines");
 xmlhttp.send();
 </script>
+
+
+
+<form id="form">
+  <label>Engine ID to update manufacture date: <input type="text" /></label>
+  <br /><br />
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+  function logSubmit(event) {
+    log.textContent = `Form Submitted! Time stamp: ${event.timeStamp}`;
+    event.preventDefault();
+  }
+  const form = document.getElementById('form');
+  const log = document.getElementById('log');
+  form.addEventListener('submit', logSubmit);
+  onsubmit = (event) => {  
+    const xmlhttp2 = new XMLHttpRequest();
+    xmlhttp2.open("PUT", "http://localhost:8080/put_req?id=0&manufactureDate=0000");
+    xmlhttp2.send();
+  };
+  </script>
+
+<p id="log"></p>
 
 </body>
 </html>
