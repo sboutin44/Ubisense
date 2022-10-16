@@ -12,8 +12,10 @@
 
 const app = require('express')(); 
 let fs = require ('fs');
+const { send } = require('process');
 const PORT = 8080;
 const endpoint1 = '/engines';
+const endpoint2 = '/put_req';
 let enginesListFilename = 'engines_data.txt';
 let enginesList;
 
@@ -70,32 +72,36 @@ function getEngineList(response)
 
 function updateManufactureDate(request, response)
 {
+    // Extract query from a PUT with parameters in the URL.
+    // test: http://localhost:8080/put_req?id=1&manufactureDate=1988
+
     console.log("updateManufactureDate");
     let found = false;
 
     // Extract request
-    // console.log(request);
-    id = request.body.key;
-    newManufactureDate = request.body.value;
+    let id = request.query.id;
+    let newManufactureDate = request.query.manufactureDate;
 
+    // Replace manufacture date if we find an engine with the same ID in our list.
+    for (let i=0; i<enginesList.length; i++)
+    {
+        if (enginesList[i].id == id)
+        {
+            enginesList[i].manufactureDate = newManufactureDate;
+            found = true;
+            console.log("Updated manufacture date. ");
+            response.sendStatus(200);
+        }
+    }
+    if (found == false)
+    {
+        console.log("Error: engine id not in database.");
+        response.sendStatus(418);
+        // response.status(404).send("Error: engine id not in database.");
+    }
 
-    console.log(`id: ${id}`);
-    console.log(`newManufactureDate: ${newManufactureDate}`);
-
-    // Replace the manufacture date if we find the engine id.
-    // for (obj in enginesList)
-    // {
-    //     if (obj.id == id)
-    //     {
-    //         obj.manufactureDate = newManufactureDate;
-    //         found = true;
-    //         console.log("Updated manufacture date. ");
-    //     }
-    // }
-    // if (found == false)
-    //     console.log("Error: engine id not in database.");
+    console.log(enginesList);
 }
-
 
 app.listen(
     PORT,
@@ -108,6 +114,6 @@ app.get(
 );
 
 app.put(
-    endpoint1, 
+    endpoint2,
     (req, res) => updateManufactureDate(req, res)
 )
