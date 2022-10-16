@@ -5,12 +5,14 @@
         1. Download node js at https://nodejs.org/en/
         2. $ npm init -y
         3. $ npm install expres
+        4. npm install --save cors // to fix the error: 'fetch: access-control-allow-origin'
         
     Run:
         $ node index.js
  */
 
 const app = require('express')(); 
+var cors = require('cors');         // to fix the error: 'fetch: access-control-allow-origin'
 let fs = require ('fs');
 const { send } = require('process');
 const PORT = 8080;
@@ -103,6 +105,11 @@ function updateManufactureDate(request, response)
 
     console.log(enginesList);
 }
+
+// to fix the error: 'fetch: access-control-allow-origin'
+app.use(cors({
+    origin: '*'
+}));
 
 app.listen(
     PORT,
