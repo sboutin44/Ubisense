@@ -16,7 +16,7 @@ const { send } = require('process');
 const PORT = 8080;
 const endpoint1 = '/engines';
 const endpoint2 = '/put_req';
-let enginesListFilename = 'engines_data.txt';
+let enginesListFilename = 'engines_data.json';
 let enginesList;
 
 class Engine {
