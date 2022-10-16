@@ -12,45 +12,10 @@
 <body>
 
 <h2>Engines</h2>
-
 <p id="demo"></p>
 
-<!-- <script>
-
-fetch('http://localhost:8080/engines')
-    .then(data => {
-        const myObj = JSON.stringify(data);
-        let text = "<table border='1'>"
-        for (let i=0; i<myObj.length; i++) {
-            text += "<tr><td>" + myObj[i].manufactureDate + "</td></tr>";
-        }
-  text += "</table>"
-  document.getElementById("demo").innerHTML = text; 
-    }).catch(error => {
-        console.log(error);
-    });
-</script> -->
-
-<!-- GET request for engines list. -->
-<script>
-const xmlhttp = new XMLHttpRequest();
-xmlhttp.onload = function() {
-  const myObj = JSON.parse(this.responseText);
-  let text = "<table border='4'>"
-    text += "<tr><td>" + "ID" + "</td>" + "<td>" + "Type" + "</td>" + "<td>" + "Manufacture Date" + "<td>" + "Submit New Date" + "</td></tr>" ;
-    for (let i=0; i<myObj.length; i++) {
-        text += "<tr><td>" + myObj[i].id + "</td>" +  "<td>"+ myObj[i].type+ "</td>" +  "<td>"+ myObj[i].manufactureDate + "</td></tr>";
-  }
-  text += "</table>"
-  document.getElementById("demo").innerHTML = text;
-}
-xmlhttp.open("GET", "http://localhost:8080/engines");
-xmlhttp.send();
-</script>
-
-
-
-<form id="form">
+<!-- INPUT form to update an engine's manufacture date. -->
+<form id="manufDateUpdateform">
   <label>Engine ID to update manufacture date: <br>
     <input type="text" id="EngineID" value="Engine ID">
     <input type="text" id="newManufactureDate" value="Manufacture Date">
@@ -58,22 +23,58 @@ xmlhttp.send();
   <button type="submit">Submit</button>
 </form>
 
+<!-- GET request for engines list. -->
+<script>
+
+// Create a new HTTP request with XMLHttp
+const xmlhttp = new XMLHttpRequest(); 
+
+// Send the GET request, when the response comes back we display the JSON data in a table.
+xmlhttp.onload = function() {
+  const myObj = JSON.parse(this.responseText);
+
+  // Create the table HTML element with our engines data.
+  let text = "<table border='4'>"
+    text += "<tr><td>" + "ID" + "</td>" + "<td>" + "Type" + "</td>" + "<td>" + "Manufacture Date" + "<td>" + "Submit New Date" + "</td></tr>" ;
+    for (let i=0; i<myObj.length; i++) {
+        text += "<tr><td>" + myObj[i].id + "</td>" +  "<td>"+ myObj[i].type+ "</td>" +  "<td>"+ myObj[i].manufactureDate + "</td></tr>";
+  }
+  text += "</table>"
+
+  // Insert the table in the HTML document object.
+  document.getElementById("demo").innerHTML = text;
+}
+
+// Send the request to our endpoint.
+xmlhttp.open("GET", "http://localhost:8080/engines");
+xmlhttp.send();
+</script>
+
 <!-- PUT request to update an engine's manfucture date -->
 <script>
+
   function logSubmit(event) {
     log.textContent = `Form Submitted! Time stamp: ${event.timeStamp}`;
     event.preventDefault();
   }
-  const form = document.getElementById('form');
+
+  // Get the values entered by the user when submitting the form.
+  const manufDateUpdateForm = document.getElementById('manufDateUpdateform');
   const log = document.getElementById('log');
-  form.addEventListener('submit', logSubmit);
+
+  // When the manuf date is submitted, we send the PUT request to the server.
+  manufDateUpdateForm.addEventListener('submit', logSubmit);
   onsubmit = (event) => {  
+
+    // Get the values entered
     const engineID = document.getElementById("EngineID");
     const newManufDate = document.getElementById("newManufactureDate");
 
+    // Format the query string for the PUT request.
     const xmlhttp2 = new XMLHttpRequest();
     requestText = "http://localhost:8080/put_req?id=" + engineID.value + "&manufactureDate=" + newManufDate.value;
     
+    // Send it.
     xmlhttp2.open("PUT", requestText);
     xmlhttp2.send();
   };
