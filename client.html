@@ -32,7 +32,8 @@ fetch('http://localhost:8080/engines')
 const xmlhttp = new XMLHttpRequest();
 xmlhttp.onload = function() {
   const myObj = JSON.parse(this.responseText);
-  let text = "<table border='3'>"
+  let text = "<table border='4'>"
+    text += "<tr><td>" + "ID" + "</td>" + "<td>" + "Type" + "</td>" + "<td>" + "Manufacture Date" + "<td>" + "Submit New Date" + "</td></tr>" ;
     for (let i=0; i<myObj.length; i++) {
         text += "<tr><td>" + myObj[i].id + "</td>" +  "<td>"+ myObj[i].type+ "</td>" +  "<td>"+ myObj[i].manufactureDate + "</td></tr>";
   }
