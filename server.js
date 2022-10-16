@@ -1,14 +1,14 @@
-/*
-    * Sebastien Boutin
+/**
+    @author Sebastien Boutin
 
     Install:
         1. Download node js at https://nodejs.org/en/
         2. $ npm init -y
         3. $ npm install expres
-        4. npm install --save cors // to fix the error: 'fetch: access-control-allow-origin'
+        4. npm install --save cors (this fixes the error: 'fetch: access-control-allow-origin')
         
     Run:
-        $ node index.js
+        $ node server.js
  */
 
 const app = require('express')(); 
@@ -30,6 +30,16 @@ class Engine {
     }
 }
 
+// default list
+let e0 = new Engine(0,'Gas',2020);
+let e1 = new Engine(1,'Diesel',2021);
+let e2 = new Engine(2,'Electric',2022);
+let defaultList = [];
+defaultList.push(e0,e1,e2);
+
+/**
+ * Store the engine list in a file.
+ */
 function writeListOnDisk(list,filename)
 {
     var json = JSON.stringify(list);
@@ -39,6 +49,10 @@ function writeListOnDisk(list,filename)
         });
 }
 
+/**
+ * Read an engine list from a file in the JSON format. 
+ * If the file doesn't exist we use the "defaultList".
+ */
 function readListFromDisk(filename)
 {
     let list = [];
@@ -47,22 +61,26 @@ function readListFromDisk(filename)
         rawList = fs.readFileSync(filename,'utf-8');
         list = JSON.parse(rawList);
     } catch (err) {
-        throw err;
+        if (err.code === 'ENOENT') {
+            console.log('File not found! Loading default list.');
+            list = defaultList;
+        } 
+        else {
+            throw err;
+        }
     }
 
     return list;
 }
 
-function add(a,b)
-{
-    return a+b;
-}
-
+/**
+ * Does various initializations when the server app starts.
+ */
 function appStartup()
 {
     console.log(`Listening on http://localhost:${PORT}`);
 
-    // Load an engine list file if it exists.
+    // Load the engine list file if it exists.
     enginesList = readListFromDisk(enginesListFilename);
     console.log(enginesList);
 }
@@ -72,19 +90,18 @@ function getEngineList(response)
     response.status(200).send(enginesList)   
 }
 
+/**
+ * Update an engine manuf. date using the query parameters from a PUT request.
+ */
 function updateManufactureDate(request, response)
 {
-    // Extract query from a PUT with parameters in the URL.
-    // test: http://localhost:8080/put_req?id=1&manufactureDate=1988
-
-    console.log("updateManufactureDate");
     let found = false;
 
-    // Extract request
+    // Extract the request data.
     let id = request.query.id;
     let newManufactureDate = request.query.manufactureDate;
 
-    // Replace manufacture date if we find an engine with the same ID in our list.
+    // Replace the manufacture date if we find an engine with the same ID in our list.
     for (let i=0; i<enginesList.length; i++)
     {
         if (enginesList[i].id == id)
@@ -99,14 +116,13 @@ function updateManufactureDate(request, response)
     if (found == false)
     {
         console.log("Error: engine id not in database.");
-        response.sendStatus(418);
-        // response.status(404).send("Error: engine id not in database.");
+        response.sendStatus(404);
     }
 
     console.log(enginesList);
 }
 
-// to fix the error: 'fetch: access-control-allow-origin'
+// This fix the error: 'fetch: access-control-allow-origin', and allow my client.html to sent GET and PUT requests.
 app.use(cors({
     origin: '*'
 }));
