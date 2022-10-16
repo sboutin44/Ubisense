@@ -1,0 +1,47 @@
+
+<!-- 
+  Guides:
+  https://www.w3schools.com/js/js_json_html.asp 
+-->
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Engines</h2>
+
+<p id="demo"></p>
+
+<!-- <script>
+
+fetch('http://localhost:8080/engines')
+    .then(data => {
+        const myObj = JSON.stringify(data);
+        let text = "<table border='1'>"
+        for (let i=0; i<myObj.length; i++) {
+            text += "<tr><td>" + myObj[i].manufactureDate + "</td></tr>";
+        }
+  text += "</table>"
+  document.getElementById("demo").innerHTML = text; 
+    }).catch(error => {
+        console.log(error);
+    });
+</script> -->
+
+<script>
+const xmlhttp = new XMLHttpRequest();
+xmlhttp.onload = function() {
+  const myObj = JSON.parse(this.responseText);
+  let text = "<table border='3'>"
+    for (let i=0; i<myObj.length; i++) {
+        text += "<tr><td>" + myObj[i].id + "</td>" +  "<td>"+ myObj[i].type+ "</td>" +  "<td>"+ myObj[i].manufactureDate + "</td></tr>";
+  }
+  text += "</table>"
+  document.getElementById("demo").innerHTML = text;
+}
+xmlhttp.open("GET", "http://localhost:8080/engines");
+xmlhttp.send();
+</script>
+
+</body>
+</html>
