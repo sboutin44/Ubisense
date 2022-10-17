@@ -25,7 +25,7 @@ It is composed of 2 files:
 ### Server
     Install:
         1. Clone this Git repository.
-        2. Download nodejs: https://nodejs.org/en/ (Node js: v16.18.0, npm: 8.19.2)
+        2. Download nodejs: https://nodejs.org
         3. From a terminal, run this:  
             $ cd <repo directory>
             $ npm init -y
