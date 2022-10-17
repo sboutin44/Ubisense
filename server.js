@@ -4,8 +4,8 @@
     Install:
         1. Download node js at https://nodejs.org/en/
         2. $ npm init -y
-        3. $ npm install expres
-        4. npm install --save cors (this fixes the error: 'fetch: access-control-allow-origin')
+        3. $ npm install express
+        4. $ npm install --save cors (this fixes the error: 'fetch: access-control-allow-origin')
         
     Run:
         $ node server.js
