@@ -20,7 +20,9 @@ It is composed of 2 files:
 - npm: 8.19.2
 - Tested with Chrome: 106.0.5249.119
 
-## Server
+
+## Run the Code
+### Server
     Install:
         1. Clone this Git repository.
         2. Download nodejs: https://nodejs.org/en/ (Node js: v16.18.0, npm: 8.19.2)
@@ -33,6 +35,6 @@ It is composed of 2 files:
     Run:
         $ node server.js
 
-## Client
+### Client
     Run:
         Open client.html in a web browser.
